@@ -12,8 +12,8 @@ using MyWebApi.Data;
 namespace MyWebApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250407123317_firstMigration")]
-    partial class firstMigration
+    [Migration("20250407142452_SeedInitialData")]
+    partial class SeedInitialData
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,9 +49,24 @@ namespace MyWebApi.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int?>("ParentCategoryId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("ParentCategoryId");
+
                     b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CategoryType = "Standard",
+                            Description = "Appareils et gadgets électroniques",
+                            ImageUrl = "https://example.com/electronique.jpg",
+                            Name = "Électronique"
+                        });
                 });
 
             modelBuilder.Entity("MyWebApi.Data.Customer", b =>
@@ -64,7 +79,7 @@ namespace MyWebApi.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -76,7 +91,19 @@ namespace MyWebApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Email")
+                        .IsUnique();
+
                     b.ToTable("Customers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Email = "jean.dupont@example.com",
+                            Name = "Jean Dupont",
+                            PhoneNumber = "0601020304"
+                        });
                 });
 
             modelBuilder.Entity("MyWebApi.Data.Order", b =>
@@ -121,6 +148,20 @@ namespace MyWebApi.Migrations
                     b.HasIndex("CustomerId");
 
                     b.ToTable("Orders");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CustomerId = 1,
+                            OrderDate = new DateTime(2025, 4, 7, 14, 24, 52, 51, DateTimeKind.Utc).AddTicks(3660),
+                            PaymentMethod = "Carte bancaire",
+                            ShippingMethod = "Colissimo",
+                            ShippingStatus = "Préparation",
+                            Status = "En cours",
+                            TotalAmount = 699.99m,
+                            TrackingNumber = "TRACK123"
+                        });
                 });
 
             modelBuilder.Entity("MyWebApi.Data.OrderItem", b =>
@@ -150,6 +191,16 @@ namespace MyWebApi.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("OrderItems");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            OrderId = 1,
+                            Price = 699.99m,
+                            ProductId = 1,
+                            Quantity = 1
+                        });
                 });
 
             modelBuilder.Entity("MyWebApi.Data.Product", b =>
@@ -180,7 +231,7 @@ namespace MyWebApi.Migrations
 
                     b.Property<string>("SKU")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<int>("Stock")
                         .HasColumnType("int");
@@ -189,7 +240,23 @@ namespace MyWebApi.Migrations
 
                     b.HasIndex("CategorieId");
 
+                    b.HasIndex("SKU")
+                        .IsUnique();
+
                     b.ToTable("Products");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CategorieId = 1,
+                            Description = "Dernier modèle avec fonctionnalités avancées",
+                            ImageUrl = "https://example.com/smartphone.jpg",
+                            Name = "Smartphone X",
+                            Price = 699.99m,
+                            SKU = "SMARTX001",
+                            Stock = 100
+                        });
                 });
 
             modelBuilder.Entity("MyWebApi.Data.ShoppingCartItem", b =>
@@ -214,11 +281,112 @@ namespace MyWebApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("CustomerId", "ProductId")
+                        .IsUnique();
+
+                    b.ToTable("ShoppingCartItems");
+                });
+
+            modelBuilder.Entity("PriceHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("ChangedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<decimal>("NewPrice")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal>("OldPrice")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("PriceHistories");
+                });
+
+            modelBuilder.Entity("ProductReview", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
                     b.HasIndex("CustomerId");
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ShoppingCartItems");
+                    b.ToTable("ProductReviews");
+                });
+
+            modelBuilder.Entity("StockMovement", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QuantityChanged")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("varchar(250)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("StockMovements");
+                });
+
+            modelBuilder.Entity("MyWebApi.Data.Categorie", b =>
+                {
+                    b.HasOne("MyWebApi.Data.Categorie", "ParentCategory")
+                        .WithMany("SubCategories")
+                        .HasForeignKey("ParentCategoryId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("ParentCategory");
                 });
 
             modelBuilder.Entity("MyWebApi.Data.Customer", b =>
@@ -254,6 +422,17 @@ namespace MyWebApi.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("CustomerId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    CustomerId = 1,
+                                    City = "Paris",
+                                    Country = "France",
+                                    State = "Île-de-France",
+                                    Street = "123 rue de Paris",
+                                    ZipCode = "75001"
+                                });
                         });
 
                     b.Navigation("Address")
@@ -299,6 +478,17 @@ namespace MyWebApi.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("OrderId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    OrderId = 1,
+                                    City = "Paris",
+                                    Country = "France",
+                                    State = "Île-de-France",
+                                    Street = "123 rue de Paris",
+                                    ZipCode = "75001"
+                                });
                         });
 
                     b.OwnsOne("Address", "ShippingAddress", b1 =>
@@ -332,6 +522,17 @@ namespace MyWebApi.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("OrderId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    OrderId = 1,
+                                    City = "Lyon",
+                                    Country = "France",
+                                    State = "Rhône",
+                                    Street = "456 avenue de Lyon",
+                                    ZipCode = "69000"
+                                });
                         });
 
                     b.Navigation("BillingAddress")
@@ -367,7 +568,7 @@ namespace MyWebApi.Migrations
                     b.HasOne("MyWebApi.Data.Categorie", "Categorie")
                         .WithMany("Products")
                         .HasForeignKey("CategorieId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Categorie");
@@ -392,9 +593,52 @@ namespace MyWebApi.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("PriceHistory", b =>
+                {
+                    b.HasOne("MyWebApi.Data.Product", "Product")
+                        .WithMany("PriceHistories")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("ProductReview", b =>
+                {
+                    b.HasOne("MyWebApi.Data.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyWebApi.Data.Product", "Product")
+                        .WithMany("Reviews")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("StockMovement", b =>
+                {
+                    b.HasOne("MyWebApi.Data.Product", "Product")
+                        .WithMany("StockMovements")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("MyWebApi.Data.Categorie", b =>
                 {
                     b.Navigation("Products");
+
+                    b.Navigation("SubCategories");
                 });
 
             modelBuilder.Entity("MyWebApi.Data.Customer", b =>
@@ -410,6 +654,12 @@ namespace MyWebApi.Migrations
             modelBuilder.Entity("MyWebApi.Data.Product", b =>
                 {
                     b.Navigation("OrderItems");
+
+                    b.Navigation("PriceHistories");
+
+                    b.Navigation("Reviews");
+
+                    b.Navigation("StockMovements");
                 });
 #pragma warning restore 612, 618
         }

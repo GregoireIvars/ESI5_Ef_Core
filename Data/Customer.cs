@@ -9,6 +9,5 @@ public class Customer
 
     // Adresse complexe
     public required Address Address { get; set; }
-
-    public required ICollection<Order> Orders { get; set; }
+    public required ICollection<Order> Orders { get; set; } = new List<Order>();
 }

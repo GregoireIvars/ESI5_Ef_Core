@@ -54,6 +54,16 @@ namespace MyWebApi.Migrations
                     b.HasIndex("ParentCategoryId");
 
                     b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CategoryType = "Standard",
+                            Description = "Appareils et gadgets électroniques",
+                            ImageUrl = "https://example.com/electronique.jpg",
+                            Name = "Électronique"
+                        });
                 });
 
             modelBuilder.Entity("MyWebApi.Data.Customer", b =>
@@ -82,6 +92,15 @@ namespace MyWebApi.Migrations
                         .IsUnique();
 
                     b.ToTable("Customers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Email = "jean.dupont@example.com",
+                            Name = "Jean Dupont",
+                            PhoneNumber = "0601020304"
+                        });
                 });
 
             modelBuilder.Entity("MyWebApi.Data.Order", b =>
@@ -126,6 +145,20 @@ namespace MyWebApi.Migrations
                     b.HasIndex("CustomerId");
 
                     b.ToTable("Orders");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CustomerId = 1,
+                            OrderDate = new DateTime(2025, 4, 7, 14, 24, 52, 51, DateTimeKind.Utc).AddTicks(3660),
+                            PaymentMethod = "Carte bancaire",
+                            ShippingMethod = "Colissimo",
+                            ShippingStatus = "Préparation",
+                            Status = "En cours",
+                            TotalAmount = 699.99m,
+                            TrackingNumber = "TRACK123"
+                        });
                 });
 
             modelBuilder.Entity("MyWebApi.Data.OrderItem", b =>
@@ -155,6 +188,16 @@ namespace MyWebApi.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("OrderItems");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            OrderId = 1,
+                            Price = 699.99m,
+                            ProductId = 1,
+                            Quantity = 1
+                        });
                 });
 
             modelBuilder.Entity("MyWebApi.Data.Product", b =>
@@ -198,6 +241,19 @@ namespace MyWebApi.Migrations
                         .IsUnique();
 
                     b.ToTable("Products");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CategorieId = 1,
+                            Description = "Dernier modèle avec fonctionnalités avancées",
+                            ImageUrl = "https://example.com/smartphone.jpg",
+                            Name = "Smartphone X",
+                            Price = 699.99m,
+                            SKU = "SMARTX001",
+                            Stock = 100
+                        });
                 });
 
             modelBuilder.Entity("MyWebApi.Data.ShoppingCartItem", b =>
@@ -363,6 +419,17 @@ namespace MyWebApi.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("CustomerId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    CustomerId = 1,
+                                    City = "Paris",
+                                    Country = "France",
+                                    State = "Île-de-France",
+                                    Street = "123 rue de Paris",
+                                    ZipCode = "75001"
+                                });
                         });
 
                     b.Navigation("Address")
@@ -408,6 +475,17 @@ namespace MyWebApi.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("OrderId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    OrderId = 1,
+                                    City = "Paris",
+                                    Country = "France",
+                                    State = "Île-de-France",
+                                    Street = "123 rue de Paris",
+                                    ZipCode = "75001"
+                                });
                         });
 
                     b.OwnsOne("Address", "ShippingAddress", b1 =>
@@ -441,6 +519,17 @@ namespace MyWebApi.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("OrderId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    OrderId = 1,
+                                    City = "Lyon",
+                                    Country = "France",
+                                    State = "Rhône",
+                                    Street = "456 avenue de Lyon",
+                                    ZipCode = "69000"
+                                });
                         });
 
                     b.Navigation("BillingAddress")

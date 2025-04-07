@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\gregoire.ivars\\OneDrive - GFI\\Bureau\\Nouveau dossier\\MyWebApi\\MyWebApi.csproj": {}
+    "C:\\Users\\gregoire.ivars\\OneDrive - GFI\\Bureau\\Nouveau dossier\\MyWebApi\\MyWebApi.csproj": {}
   },
   "projects": {
-    "c:\\Users\\gregoire.ivars\\OneDrive - GFI\\Bureau\\Nouveau dossier\\MyWebApi\\MyWebApi.csproj": {
+    "C:\\Users\\gregoire.ivars\\OneDrive - GFI\\Bureau\\Nouveau dossier\\MyWebApi\\MyWebApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\gregoire.ivars\\OneDrive - GFI\\Bureau\\Nouveau dossier\\MyWebApi\\MyWebApi.csproj",
+        "projectUniqueName": "C:\\Users\\gregoire.ivars\\OneDrive - GFI\\Bureau\\Nouveau dossier\\MyWebApi\\MyWebApi.csproj",
         "projectName": "MyWebApi",
-        "projectPath": "c:\\Users\\gregoire.ivars\\OneDrive - GFI\\Bureau\\Nouveau dossier\\MyWebApi\\MyWebApi.csproj",
+        "projectPath": "C:\\Users\\gregoire.ivars\\OneDrive - GFI\\Bureau\\Nouveau dossier\\MyWebApi\\MyWebApi.csproj",
         "packagesPath": "C:\\Users\\gregoire.ivars\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\gregoire.ivars\\OneDrive - GFI\\Bureau\\Nouveau dossier\\MyWebApi\\obj\\",
+        "outputPath": "C:\\Users\\gregoire.ivars\\OneDrive - GFI\\Bureau\\Nouveau dossier\\MyWebApi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\gregoire.ivars\\AppData\\Roaming\\NuGet\\NuGet.Config"
